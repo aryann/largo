@@ -13,7 +13,7 @@ def get_cars(request, time):
         collection_event = (
             models.CollectionEvent.objects.get_closest_event(float(time)))
     except models.CollectionEvent.DoesNotExist:
-        return http.HttpResponse()
+        return http.HttpResponse('[]')
 
     states = models.State.objects.filter(
         event=collection_event).select_related('car')
