@@ -19,8 +19,8 @@ class Car(models.Model):
 class CollectionEventManager(models.Manager):
     
     def get_closest_event(self, time_sec):
-        lt = self.filter(time_sec__lte=time_sec).order_by('-time_sec')
-        gt = self.filter(time_sec__gte=time_sec).order_by('time_sec')
+        lt = self.filter(time_sec__lte=time_sec).order_by('-time_sec')[:1]
+        gt = self.filter(time_sec__gt=time_sec).order_by('time_sec')[:1]
 
         if lt and gt:
             if time_sec - lt[0].time_sec < gt[0].time_sec - time_sec:
