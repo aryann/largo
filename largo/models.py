@@ -22,9 +22,7 @@ class CollectionEventManager(models.Manager):
         lt = self.filter(time_sec__lte=time_sec).order_by('-time_sec')
         gt = self.filter(time_sec__gte=time_sec).order_by('time_sec')
 
-        print time_sec, lt, gt
         if lt and gt:
-            print time_sec, lt[0].time_sec, gt[0].time_sec
             if time_sec - lt[0].time_sec < gt[0].time_sec - time_sec:
                 return lt[0]
             else:
