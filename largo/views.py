@@ -1,4 +1,5 @@
 import json
+import time
 
 from django import http
 from largo import models
@@ -8,10 +9,11 @@ def index(request):
     return http.HttpResponse('Hello world!\n')
 
 
-def get_cars(request, time):
+def get_cars(request):
+    time_sec = float(request.GET.get('time_sec', time.time()))
     try:
         collection_event = (
-            models.CollectionEvent.objects.get_closest_event(float(time)))
+            models.CollectionEvent.objects.get_closest_event(time_sec))
     except models.CollectionEvent.DoesNotExist:
         return http.HttpResponse('[]')
 

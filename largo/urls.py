@@ -6,5 +6,5 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^$', 'largo.views.index'),
-    url(r'^getcars/(?P<time>\d+)$', 'largo.views.get_cars'),
+    url(r'^getcars$', 'largo.views.get_cars'),
 )
