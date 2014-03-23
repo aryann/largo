@@ -2,11 +2,12 @@ import json
 import time
 
 from django import http
+from django import shortcuts
 from largo import models
 
 
 def index(request):
-    return http.HttpResponse('Hello world!\n')
+    return shortcuts.render(request, 'largo/index.html', {})
 
 
 def get_cars(request):
