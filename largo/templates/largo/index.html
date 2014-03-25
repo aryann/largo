@@ -34,11 +34,17 @@
   </head>
 
   <body>
-    <div id="data">{{ time_sec }}</div>
+    <div id="data">
+      <a href="#" id="-1h">-1h</a>
+      <span id="current-time">{{ time_sec }}</span>
+      <a href="#" id="+1h">+1h</a>
+    </div>
 
     <div id="map-canvas" />
 
     <script>
+      var currentTimeSec = {{ time_sec }};
+
       var getData = function(timeSec, processData) {
         var req = new XMLHttpRequest();
 
@@ -57,31 +63,48 @@
         req.send();
       };
 
-      var initialize = function() {
-        var mapOptions = {
-          center: new google.maps.LatLng(47.609722, -122.333056),
-          zoom: 12,
-          disableDefaultUI: true,
-        };
-        var map = new google.maps.Map(
-            document.getElementById("map-canvas"), mapOptions);
-        getData({{ time_sec }}, function(data) {
-           cars = JSON.parse(data);
-           console.log(cars);
-           for (var i = 0; i < cars.length; i++) {
-             var marker = new google.maps.Marker({
-               // TODO: In the data set, the longitude is being stored
-               // as the latitude and the latitude and longitude. Until
-               // that bug is fixed, we'll have to swap them here. :(
-               position: new google.maps.LatLng(cars[i].lon, cars[i].lat),
-               map: map,
-               title: cars[i].name,
-             });
-           }
-        });
-      };
-      google.maps.event.addDomListener(window, 'load', initialize);
 
+      var mapOptions = {
+        center: new google.maps.LatLng(47.609722, -122.333056),
+        zoom: 12,
+        disableDefaultUI: true,
+      };
+      var map = new google.maps.Map(
+          document.getElementById("map-canvas"), mapOptions);
+      var addMarkers = function(data) {
+        var cars = JSON.parse(data);
+        for (var i = 0; i < cars.length; i++) {
+          var marker = new google.maps.Marker({
+            // TODO: In the data set, the longitude is being stored
+            // as the latitude and the latitude and longitude. Until
+            // that bug is fixed, we'll have to swap them here. :(
+            position: new google.maps.LatLng(cars[i].lon, cars[i].lat),
+            map: map,
+            title: cars[i].name,
+          });
+        }
+      };
+
+      getData(currentTimeSec, addMarkers);
+
+      var currentTimeSpan = document.getElementById("current-time");
+
+      // TODO: Remove the redundancy between the -1h and +1h logic.
+      var minus1h = document.getElementById("-1h");
+      minus1h.onclick = function() {
+        currentTimeSec = currentTimeSec - 60 * 60;
+        getData(currentTimeSec, addMarkers);
+        currentTimeSpan.innerHTML = currentTimeSec;
+        return false;
+      };
+
+      var plus1h = document.getElementById("+1h");
+      plus1h.onclick = function() {
+        currentTimeSec = currentTimeSec + 60 * 60;
+        getData(currentTimeSec, addMarkers);
+        currentTimeSpan.innerHTML = currentTimeSec;
+        return false;
+      };
     </script>
   </body>
 </html>
