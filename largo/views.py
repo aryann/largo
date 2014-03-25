@@ -7,7 +7,9 @@ from largo import models
 
 
 def index(request):
-    return shortcuts.render(request, 'largo/index.html', {})
+    context = {'time_sec': time.time()}
+    return shortcuts.render(
+        request, 'largo/index.html', context)
 
 
 def get_cars(request):
