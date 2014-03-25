@@ -63,7 +63,6 @@
         req.send();
       };
 
-
       var mapOptions = {
         center: new google.maps.LatLng(47.609722, -122.333056),
         zoom: 12,
@@ -71,8 +70,16 @@
       };
       var map = new google.maps.Map(
           document.getElementById("map-canvas"), mapOptions);
+      var markers = [];
       var addMarkers = function(data) {
+        // TODO: Instead of removing all markers and adding new ones,
+        // we should only remove the markers that need to be removed.
         var cars = JSON.parse(data);
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers = [];
+
         for (var i = 0; i < cars.length; i++) {
           var marker = new google.maps.Marker({
             // TODO: In the data set, the longitude is being stored
@@ -82,6 +89,7 @@
             map: map,
             title: cars[i].name,
           });
+          markers.push(marker);
         }
       };
 
