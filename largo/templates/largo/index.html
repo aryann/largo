@@ -36,7 +36,7 @@
   <body>
     <div id="data">
       <a href="#" id="-1m">-1m</a>
-      <span id="current-time">{{ time_sec }}</span>
+      <span id="current-time"></span>
       <a href="#" id="+1m">+1m</a>
     </div>
 
@@ -103,13 +103,14 @@
       getData(currentTimeSec, addMarkers);
 
       var currentTimeSpan = document.getElementById("current-time");
+      currentTimeSpan.innerHTML = new Date(currentTimeSec * 1000);
 
       // TODO: Remove the redundancy between the -1m and +1m logic.
       var minus1m = document.getElementById("-1m");
       minus1m.onclick = function() {
         currentTimeSec = currentTimeSec - 60;
         getData(currentTimeSec, addMarkers);
-        currentTimeSpan.innerHTML = currentTimeSec;
+        currentTimeSpan.innerHTML = new Date(currentTimeSec * 1000);
         return false;
       };
 
@@ -117,7 +118,7 @@
       plus1m.onclick = function() {
         currentTimeSec = currentTimeSec + 60;
         getData(currentTimeSec, addMarkers);
-        currentTimeSpan.innerHTML = currentTimeSec;
+        currentTimeSpan.innerHTML = new Date(currentTimeSec * 1000);
         return false;
       };
     </script>
