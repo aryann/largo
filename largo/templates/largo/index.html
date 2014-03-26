@@ -35,9 +35,9 @@
 
   <body>
     <div id="data">
-      <a href="#" id="-1h">-1h</a>
+      <a href="#" id="-1m">-1m</a>
       <span id="current-time">{{ time_sec }}</span>
-      <a href="#" id="+1h">+1h</a>
+      <a href="#" id="+1m">+1m</a>
     </div>
 
     <div id="map-canvas" />
@@ -88,6 +88,13 @@
             position: new google.maps.LatLng(cars[i].lon, cars[i].lat),
             map: map,
             title: cars[i].name,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: 'red',
+              fillOpacity: 1,
+              scale: 5,
+              strokeWeight: 0,
+            },
           });
           markers.push(marker);
         }
@@ -97,18 +104,18 @@
 
       var currentTimeSpan = document.getElementById("current-time");
 
-      // TODO: Remove the redundancy between the -1h and +1h logic.
-      var minus1h = document.getElementById("-1h");
-      minus1h.onclick = function() {
-        currentTimeSec = currentTimeSec - 60 * 60;
+      // TODO: Remove the redundancy between the -1m and +1m logic.
+      var minus1m = document.getElementById("-1m");
+      minus1m.onclick = function() {
+        currentTimeSec = currentTimeSec - 60;
         getData(currentTimeSec, addMarkers);
         currentTimeSpan.innerHTML = currentTimeSec;
         return false;
       };
 
-      var plus1h = document.getElementById("+1h");
-      plus1h.onclick = function() {
-        currentTimeSec = currentTimeSec + 60 * 60;
+      var plus1m = document.getElementById("+1m");
+      plus1m.onclick = function() {
+        currentTimeSec = currentTimeSec + 60;
         getData(currentTimeSec, addMarkers);
         currentTimeSpan.innerHTML = currentTimeSec;
         return false;
