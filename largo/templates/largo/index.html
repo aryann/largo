@@ -107,6 +107,7 @@
           if (carsOnMap.hasOwnProperty(currentCarLocation) &&
               !(currentCarLocation in newCarLocations)) {
             carsOnMap[currentCarLocation].marker.setMap(null);
+            delete carsOnMap[currentCarLocation];
           }
         }
       };
