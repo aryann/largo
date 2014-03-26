@@ -70,33 +70,44 @@
       };
       var map = new google.maps.Map(
           document.getElementById("map-canvas"), mapOptions);
-      var markers = [];
-      var addMarkers = function(data) {
-        // TODO: Instead of removing all markers and adding new ones,
-        // we should only remove the markers that need to be removed.
-        var cars = JSON.parse(data);
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers = [];
 
+      var carsOnMap = {}
+
+      var addMarkers = function(data) {
+        var cars = JSON.parse(data);
+
+        var newCarLocations = {}
         for (var i = 0; i < cars.length; i++) {
-          var marker = new google.maps.Marker({
-            // TODO: In the data set, the longitude is being stored
-            // as the latitude and the latitude and longitude. Until
-            // that bug is fixed, we'll have to swap them here. :(
-            position: new google.maps.LatLng(cars[i].lon, cars[i].lat),
-            map: map,
-            title: cars[i].name,
-            icon: {
-              path: google.maps.SymbolPath.CIRCLE,
-              fillColor: 'red',
-              fillOpacity: 1,
-              scale: 5,
-              strokeWeight: 0,
-            },
-          });
-          markers.push(marker);
+          newCarLocations[[cars[i].lon, cars[i].lat]] = cars[i];
+        }
+
+        // Figures out which cars need to be drawn.
+        for (var newCarLocation in newCarLocations) {
+          if (newCarLocations.hasOwnProperty(newCarLocation) &&
+              !(newCarLocation in carsOnMap)) {
+            var car = newCarLocations[newCarLocation];
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(car.lon, car.lat),
+              map: map,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: 'red',
+                fillOpacity: 1,
+                scale: 5,
+                strokeWeight: 0,
+              },
+            });
+            car.marker = marker;
+            carsOnMap[[car.lon, car.lat]] = car;
+          }
+        }
+
+        // Figures out which cars need to be removed.
+        for (var currentCarLocation in carsOnMap) {
+          if (carsOnMap.hasOwnProperty(currentCarLocation) &&
+              !(currentCarLocation in newCarLocations)) {
+            carsOnMap[currentCarLocation].marker.setMap(null);
+          }
         }
       };
 
